@@ -13,13 +13,13 @@ int main(){
         cin >> input_num;
 
         // implementing the logic
-        for(int i = 0; i <= input_num ; i++){
+        for(int row = 0; row <= input_num ; row++){
 
-            for(int j = 0; j < input_num-i ; j++ ){
+            for(int space = 0; space < input_num-row ; space++ ){
                 cout << " ";
             }
-            for(int j = 0; j < i ; j++){
-                cout << "* ";
+            for(int j = 0; j < rpw ; j++){
+                cout << "$ ";
             }
 
             cout << endl;
