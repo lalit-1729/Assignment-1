@@ -1,4 +1,5 @@
 // Following the international system of numeration
+// not applicable for 0
 
 #include <iostream>
 #include <stdlib.h>
@@ -12,7 +13,7 @@ string words_array[28] = {"zero", "one", "two", "three", "four", "five", "six", 
 // tens and units function
 void tens_and_units(int number){
     if(number == 0){
-        cout << words_array[0];
+        return;
     }
 
     else if(number <= 20 && number > 0){
