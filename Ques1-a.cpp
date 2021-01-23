@@ -3,6 +3,15 @@
 
 using namespace std;
 
+void take_input(int *no_of_rows){
+    cout << "Enter the number of rows of patterns: "<< endl;
+    cin >> *no_of_rows;
+    cout << endl;
+    return;
+}
+
+
+// function to print the pattern
 void print_pattern(int no_of_rows){
     for(int row = 0; row<no_of_rows ; row++){
         for(int character = 0; character<=row ; character++){
@@ -18,11 +27,10 @@ int main(){
     while(run_again == 'y'){
         system("cls");
         //taking input from the user
-        cout << "Enter the number of rows of patterns: "<< endl;
-        int input_num;
-        cin >> input_num;
-        cout << endl;
 
+        int input_num;
+
+        take_input(&input_num);
         print_pattern(input_num);
 
         //asking to run again
