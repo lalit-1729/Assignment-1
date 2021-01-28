@@ -1,16 +1,48 @@
-//*********i was only able to implement this algorithm after having some youtube gyan, i.e. i have watch the implementation and then applied here....*********
-
 // Here, we are using the quick sort method
 // it is the method, that uses the divide and rule strategy
 // we will implement it by defining the two function
 // partition function, to divide the array across the pivot point in two array , one containing elements smaller than pivot point and other containing the elements greater than pivot point
-// quick_sort, uses to recursion to perform partition on the sub-arrays
+// quick sort, uses recursion to perform partition on the sub-arrays
 
 #include <iostream>
 #include <stdlib.h>
 using namespace std;
 
-// partition function
+//Takes input form the user
+void take_input(string *user_input){
+    cout << "Enter the size of the array: ";
+    cin >> *user_input;
+}
+
+//Takes the array input from the user
+void take_array_input(int *arr, int array_size){
+    cout << "Enter the array elements: \n";
+    for(int i = 0;i<array_size ; i++){
+        cin >> *(arr+i);
+    }
+}
+
+//Validates only the positive values
+bool is_input_valid(string user_input){
+    for(int i = 0;user_input[i] != '\0'; i++){ // running the loop till the terminating value
+        //using the ASCII table to verify, ACSII code for '0'=48 and '9'=57
+        if(user_input[i] < 48 || user_input[i] > 57){
+            return false;
+        }
+    }
+    return true;
+}
+
+//Prints the sorted array
+void show_sorted_array(int *arr, int array_size){
+    cout << "\nThe sorted Array is: \n";
+    for(int i = 0; i<array_size ; i++){
+        cout << *(arr+i)<< " ";
+    }
+    cout << endl;
+}
+
+//Partition function
 int partition(int arr[], int lower_bound , int upper_bound){
     int start = lower_bound, end = upper_bound, pivot = arr[lower_bound];
     while(start < end){
@@ -28,12 +60,7 @@ int partition(int arr[], int lower_bound , int upper_bound){
     }
 
     swap(arr[lower_bound] , arr[end]);
-    /*for(int i = 0; i <= upper_bound ; i++){
-        cout << arr[i] << " ";
-    }
-    cout << endl;*/
     return end;
-
 }
 
 
@@ -48,38 +75,50 @@ void quick_sort(int arr[], int lower_bound, int upper_bound){
     }
 }
 
+//Asks user to run again & takes action accordingly
+bool want_to_run_again(){
+    char continue_program;
+    cout << "\nWould you like to run the program again? (y for yes) / (n for no)" << endl;
+    cin >> continue_program;
+
+    //input validation
+    while( !( continue_program == 'y' || continue_program == 'n' ) ){
+        cout << "Invalid Response, please enter a valid one: ";
+        cin >> continue_program;
+    }
+
+    if(continue_program == 'y'){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
 int main(){
-    char run_again = 'y';
-    while(run_again == 'y'){
-        system("cls");
+    do{
+        system("cls");//clears the console window after every successful run
+        cout << "\n\n\t\t :: Quick Sort :: \n\n\n";
+        string user_input;
+        take_input(&user_input);
 
-        int array_size;
-        cout << "Enter the size of the array: ";
-        cin >> array_size;
-
-        // array input
-        cout << "Enter the array elements: \n";
-        int input_array[array_size];
-        for(int i = 0; i<array_size ; i++){
-            cin >> input_array[i];
+        //input validation
+        while(is_input_valid(user_input) == false){
+            cout << "Invalid Input:\n";
+            take_input(&user_input);
         }
 
-        cout << endl;
+        //converting the valid input to integer
+        int array_size = stoi(user_input);
+        int user_array_input[array_size];
 
-        quick_sort(input_array, 0, array_size-1);
+        take_array_input(user_array_input, array_size);
 
-        // array output
-        cout << "The sorted array is: \n";
-        for(int i = 0; i < array_size ; i++){
-            cout << input_array[i] << " ";
-        }
+        quick_sort(user_array_input, 0, array_size-1);
+        //Results
+        show_sorted_array(user_array_input, array_size);
 
-        //asking to run again
-        cout << "\n\nDo you wanna run program again...??? (y/n) " << endl;
-        cin >> run_again;
-        cout << endl;
-    }
+    }while(want_to_run_again() == true);
 
     return 0;
 }
