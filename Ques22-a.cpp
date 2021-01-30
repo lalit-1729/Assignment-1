@@ -1,94 +1,202 @@
-#include <stdlib.h>
+//Implementing the Stack data structure
+//Using the linked list to implement the stack
+//Linked list was implement in the previous Question
+
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
-// defining the stack class
-class Stack{
-
-    public:
-    int top_element = -1;
-    int array[10000]= {0};
-
-    void push(int to_be_pushed){
-        array[++top_element] = to_be_pushed;
-    }
-
-    void pop(){
-        array[top_element--] = 0;
-    }
-
-    int size(){
-        return top_element+1;
-    }
-
-    int peek(int index){
-        return array[index-1];
-    }
-
-    int top(){
-        return array[top_element];
-    }
-
-    bool is_empty(){
-        if(top_element == -1){
-            return true;
-        }
-        else{
+//Validates only non-negative number
+bool is_input_valid(string user_input){
+    for(int i = 0; user_input[i] != '\0' ; i++){
+        //Using the ASCII code for validation
+        if(user_input[i] < 48 || user_input[i] > 57){
             return false;
         }
     }
-};
+    return true;
+}
+
+//Node for the linked list
+struct node{
+        int data;
+        struct node *next_node = NULL;
+    };
+
+//Returns the length of the stack
+int stack_length(struct node *head){
+    struct node *temp_node = head;
+    int stack_len = 1;
+    while(temp_node -> next_node != NULL){ //going through each node
+        temp_node = temp_node -> next_node;
+        stack_len++;
+    }
+    return stack_len;
+}
+
+//Prints the top node's data
+void top(struct node *head){
+    if(head->next_node == NULL){
+        cout << head->data;
+        return;
+    }
+    struct node *temp_node = head->next_node;
+    while(temp_node -> next_node != NULL){ //going through each node
+        temp_node = temp_node -> next_node;
+    }
+    cout << temp_node->data << endl;
+}
+
+//POPS the top node
+void pop(struct node *head){
+    if(head->next_node == NULL){ //for a single node stack
+        head = NULL;
+        return;
+    }
+    struct node *temp_node = head;
+    struct node *temp_node2; //This node will store the address of the second last node
+    while(temp_node -> next_node != NULL){ //going through each node
+        temp_node2 = temp_node;
+        temp_node = temp_node -> next_node;
+    }
+    temp_node2 ->next_node = NULL;
+    free(temp_node);
+}
+
+//Peeks at a particular location
+// assuming the indexing starts from 1
+int peek(struct node *head, int peek_at){
+    if(peek_at > stack_length(head) || peek_at < 1){
+        cout << "Invalid peeking index. Try Again: ";
+        cin >> peek_at;
+        peek(head, peek_at);//recursion
+    }
+
+    struct node *temp_node = head;
+    for(int i = 1; i<peek_at ; i++){
+        temp_node = temp_node->next_node;
+    }
+    return temp_node->data;
+}
+
+//Pushing at the top
+void push(struct node *head, int data){
+    struct node *tail = (struct node*)calloc(1, sizeof(struct node)); // returns the memory address of the memory allocated
+    tail -> data = data;
+    struct node *temp_node = head;
+
+    if(head->next_node == NULL){
+        temp_node -> next_node = tail;
+        return;
+    }
+
+    else{
+        while(temp_node -> next_node != NULL){
+            temp_node = temp_node -> next_node;
+        }
+    }
+
+    temp_node -> next_node = tail;
+    return;
+}
+
+//Creates a stack in the main method
+void create_stack(struct node *head){
+    string user_input;
+    cout << "\nEnter the length of the stack: ";
+    cin >> user_input;
+    //input validation
+    while(is_input_valid(user_input) == false){
+        cout << "Invalid input, Please try a valid one: ";
+        cin >> user_input;
+    }
+
+    int no_of_pushs = stoi(user_input) - 1;
+    int data;
+    cout << "\nEnter the Elements, press ENTER after every element: \n";
+    cin >> data; //first element data
+    head->data = data;
+
+    //Rest elements data
+    while(no_of_pushs--){
+        cin >> data;
+        push(head, data);
+    }
+}
+
+//Peek in stack function for the main method
+void peek_in_stack(struct node *head){
+    char continue_peek;
+    do{
+        string user_input;
+        cout << "\n\nEnter the index to peek at, index is staring from 1: ";
+        cin >> user_input;
+
+        //Input Validation
+        while(is_input_valid(user_input) == false){
+            cout << "Invalid input, please try a valid one: ";
+            cin >> user_input;
+        }
+        cout <<  peek(head, stoi(user_input));//string to integer conversion
+
+        cout << "\nWould you like to peek again...? (y for yes)/(n for no)";
+        cin >> continue_peek;
+
+        //Input Validation
+        while( !( continue_peek == 'y' || continue_peek == 'n' ) ){
+        cout << "Invalid Response, enter a valid one: ";
+        cin >> continue_peek;
+        }
+        if(continue_peek == 'n' )
+            break;
+
+    }while(continue_peek != 'q');
+}
+
+//Pops the full stack in the main method
+void pop_full_stack(struct node *head){
+    int stack_len = stack_length(head);
+
+    while(stack_len--){
+        top(head);
+        pop(head);
+    }
+}
+
+//Asking user to rerun and returning the bool value accordingly
+bool want_to_run_again(){
+    char continue_program;
+    cout << "\n\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
+    cin >> continue_program;
+
+    //input validation, validates only lowercase 'y' & 'n'
+    while( !( continue_program == 'y' || continue_program == 'n' ) ){
+        cout << "Invalid Response, enter a valid one: ";
+        cin >> continue_program;
+    }
+
+    if(continue_program == 'y'){
+        return true;
+    }
+    else{
+        cout << "\n\n\t\t\t YOU JUST QUIT THE PROGRAM...!!!\n\n";
+        return false;
+    }
+}
+
 
 int main(){
+    do{
+        system("cls");//Clears the console window after every successful run
+        cout << "\n\n\t\t :: STACK IMPLEMENTATION :: \n\n";
+        struct node head;
 
-    char run_again = 'y';
-    while(run_again == 'y'){
-        system("cls");
+        create_stack(&head);
+        peek_in_stack(&head);
+        cout << "\nSTACK POPING:\n";
+        pop_full_stack(&head);
 
-        Stack stack1;
-
-        int stack_size;
-        cout << "Enter the size of the stack (less than 10000) you want: " << endl;
-        cin >> stack_size;
-
-        int stack_element;
-        cout << "Stack Pushing, Enter the elements: "<< endl;
-        for(int i = 0 ; i<stack_size ; i++){
-            cin >> stack_element;
-            stack1.push(stack_element);
-        }
-
-        char to_peek = 'y';
-        while(to_peek == 'y'){
-
-            cout << "\nDo you want to peek in the stack...??? (y/n) ";
-            cin >> to_peek;
-            if(to_peek != 'y'){
-                break;
-            }
-
-            int to_peek_at;
-            cout << "Enter the index of the element to: ";
-            cin >> to_peek_at;
-            cout << stack1.peek(to_peek_at) << "\n";
-
-        }
-
-        cout  << "\nStack Poping:" << endl;
-        for(int i = 0 ; i<stack_size ; i++){
-            cout << stack1.top() << endl;
-            stack1.pop();
-
-            if(stack1.is_empty()){
-                cout << "The stack is empty" << endl;
-            }
-        }
-
-        //asking to run again
-        cout << "\nDo you wanna run program again...??? (y/n) " << endl;
-        cin >> run_again;
-        cout << endl;
-    }
+    }while(want_to_run_again() == true);
 
     return 0;
 }
