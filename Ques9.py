@@ -1,5 +1,5 @@
 #matrix multiplication using oop
-
+from os import system # to clear the console window after every successful run
 
 class Matrix:
     def __init__(self, row, column):
@@ -12,7 +12,7 @@ class Matrix:
             for j in range(self.column):
                 self.matrix[i][j] = int(self.matrix[i][j])
         return self.matrix
-    
+
     def multiply(self, matB):
         row_A = len(self.matrix)
         row_B = len(matB)
@@ -24,27 +24,58 @@ class Matrix:
             row = []
             for j in range(col_B):
                 sum = 0
-                for k in range(col_B):
+                for k in range(row_B):
                     sum += self.matrix[i][k]*matB[k][j]
                 row.append(sum)
             self.multiplied_matrix.append(row)
-        return self.multiplied_matrix                 
+        return self.multiplied_matrix
 
-run_again = 'y'
-while(run_again == 'y'):
+def take_input(matrix_name):
+    print("Enter the rows and columns of matrix of ", matrix_name," :")
+    rows , columns = 0,0
+    #input validation
+    while True:
+        try:
+            user_input1, user_input2 = input().split(' ', 2)
+            rows = int(user_input1)
+            columns = int(user_input2)
+            if rows < 1 or columns < 1:
+                print("Positive integer only ,please try again with a valid one:")
+                continue
+            else:
+                break
+        except ValueError:
+            print("Invalid Integer, please try again with a valid one:")
+            
+    return rows, columns
 
-    #matrix_A input
-    rows_A, columns_A = input("Enter the number of row and columns of the Matrix A: ").split(' ', 2)
-    rows_A = int(rows_A)
-    columns_A = int(columns_A)
+def print_matrix(matrix):
+    rows = len(matrix)
+    columns = len(matrix[0])
+    for i in range(rows):
+        print(end ="\n")
+        for j in range(columns):
+            print(multiplied_matrix[i][j], end = " ")
+    
+
+continue_program = 'y'
+while(continue_program == 'y'):
+    system("cls")#clears the console window
+
+    print("\n\n\t\t :: MATRIX MULTIPLICATION USING OOP :: \n\n  ")
+    rows_A, columns_A = take_input('A')
+    rows_B, columns_B = take_input('B')
+    
+    #Verifying the required condition for the matrix multiplication
+    while columns_A != rows_B:
+        print("\nThe no. of rows of matrix A is not matching with the no. of columns, please try again with a valid onoe:")
+        rows_A, columns_A = take_input('A')
+        rows_B, columns_B = take_input('B')
+        
     matrix_A =  Matrix(rows_A, columns_A)
     print("Enter the matrix A: ")
     matrix_A.matrix_input()
 
-    #matrix_B input
-    rows_B, columns_B = input("Enter the number of row and columns of the Matrix B: ").split(' ', 2)
-    rows_B = int(rows_B)
-    columns_B = int(columns_B)
     matrix_B =  Matrix(rows_B, columns_B)
     print("Enter the matrix B: ")
     matrix_B.matrix_input()
@@ -54,40 +85,12 @@ while(run_again == 'y'):
 
     #result output
     print("\n The multiplied matrix is: ")
-    for i in range(columns_A):
-        print(end ="\n")
-        for j in range(rows_B):
-            print(multiplied_matrix[i][j], end = " ")
-
-    run_again = input("\n\nDo you wanna run this program again...?? (y/n)")
+    print_matrix(multiplied_matrix)
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-
+    #asking user to rerun
+    continue_program = input("\nWould you like to rerun the program...?? (y for yes)/ (n for no)\n")
+    while not (continue_program == 'y' or continue_program == 'n'):
+        print("Invalid input, please try again with a valid one:")
+        continue_program = input("\n\nWould you like to rerun the program...?? (y for yes)/ (n for no)")
+        
+print("\n\n\t\t YOU JUST QUIT THE PROGRAM....!!!")
