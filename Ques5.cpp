@@ -6,11 +6,11 @@
 using namespace std;
 
 
-//CHECKING FOR ANY CHARACTER WITH VALUE OTHER THAN A NUMERIC  VALUE
-bool numeric_validator(string user_input){
+//Checking for any value other than numeric and '.'
+bool is_input_valid(string user_input){
     int i = 0;
     while(user_input[i] != '\0'){
-
+        //using assic code to validate
         if(user_input[i] < 48 || user_input[i] > 57){
             if(user_input[i] == '.'){
                 i++;
@@ -24,9 +24,9 @@ bool numeric_validator(string user_input){
 }
 
 
-//VALIDATE THE RANGE OF THE USER`S ENTERED MARKS
-bool range_validator(string user_input){
-    //STRING TO FLOAT CONVERTION
+//Validates the range of the input
+bool is_range_valid(string user_input){
+    //string to float conversion
     float user_marks = stof(user_input);
     if(user_marks > -1 && user_marks < 101){
         return true;
@@ -37,14 +37,14 @@ bool range_validator(string user_input){
 }
 
 
-//TAKES THE USER'S INPUT
+//Takes the input form the user
 void take_input(string *user_input, int i){
     cout << "Enter the marks of subject: " << i+1 << ": ";
     cin >> *user_input;
 }
 
 
-//TAKES A VALID VALUE FOR THE CONTINUE PROGRAM VARIABLE
+//Ask user to rerun and validates the input
 void ask_to_run_again(char *continue_program){
 
     cout << "Would you like to run the program again? (y for yes) / (n for no)" << endl;
@@ -59,24 +59,21 @@ void ask_to_run_again(char *continue_program){
 
 int main(){
     char continue_program = 'y';
+    do{
 
-    while(continue_program == 'y'){
-
-        system("cls"); // CLEARS THE SCREEN AFTER EVERY SUCCESSFULL RUN
+        system("cls"); // Clears the console window after every successful run
         cout << "\n\n\t\t:: Average of your seven subjects marks ::\n";
         cout << "\t\t  :: Range of marks is from 0 to 100 :: \n\n";
-
 
         string user_marks;
         float sum_of_marks = 0;
         int i = 0;
 
-
         while(i<7){
             take_input(&user_marks, i);
 
-            //INPUT VALIDATION
-            while( !numeric_validator(user_marks) || !range_validator(user_marks)){
+            //Input validation
+            while( !is_input_valid(user_marks) || !is_range_valid(user_marks)){
                 cout << "invalid input, please try again : ";
                 cin >> user_marks;
             }
@@ -84,10 +81,11 @@ int main(){
             i++;
         }
 
-        //RESULT
         cout << "\nThe average of the marks is: " <<  sum_of_marks/7 << "\n\n";
         ask_to_run_again(&continue_program);
-    }
+    }while(continue_program == 'y');
+
+    cout << "\n\n\t\t YOU JUST QUIT THE PROGRAMN....!!!\n\n";
 
     return 0;
 }
