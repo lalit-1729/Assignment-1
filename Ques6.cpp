@@ -15,7 +15,7 @@ void take_input(string *user_input){
 bool is_input_valid(string user_input){
     for(int i = 0; user_input[i] != '\0' ; i++){ // running the loop till the terminating value
         //using the ASCII table to verify, ACSII code for '0'=48 and '9'=57
-        if(user_input[i] < 49 || user_input[i] > 57){
+        if(user_input[i] < 48 || user_input[i] > 57){
             return false;
         }
     }
