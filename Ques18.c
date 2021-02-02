@@ -28,7 +28,6 @@ int main(){
             return 0;
         }
 
-
         // implementing the anagram logic
         else{
 
