@@ -5,13 +5,12 @@
 #include <stdlib.h>
 using namespace std;
 
-//Takes the input from the user
-void take_input(string *user_input){
-    cout << "Enter a string a without space: ";
-    cin >> *user_input;
+void refresh_screen(){
+    system("cls"); //To clear the Console window
+    cout << "\n\n\t\t\t :: Reversing A String :: \n";
+    cout << "\t\t:: You can enter alphanumeric character ::\n\n";
 }
 
-//Computes the length of the string
 int string_length(string user_input){
     int string_size = 0;
     while(user_input[string_size] != '\0'){
@@ -20,50 +19,59 @@ int string_length(string user_input){
     return string_size;
 }
 
-//Reverses the provided string
-string reverse_string(string user_input, int string_size){
+bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+    if(string_length(string1) != string_length(string2))
+        return false;
+    else{
+        for(int i = 0; i<string_length(string1) ; i++){
+            if(string1[i] != string2[i])
+                return false;
+        }
+    }
+    return true;
+}
+
+void take_input(string *user_input){
+    cout << "Enter a string a without space: ";
+    cin >> *user_input;
+}
+
+string reverse_string(string user_input){
+    int string_size = string_length(user_input);
     string reversed_string = user_input; //having a string of same length to changes it later
-    for(int i = 0; i < string_size ; i++){
-        reversed_string[string_size - i - 1] = user_input[i];
+    for(int i = 1; i <= string_size ; i++){
+        reversed_string[string_size - i] = user_input[i-1];
     }
     return reversed_string;
 }
 
-//asks user to rerun the program and returns a bool value accordingly
-bool want_to_run_again(){
-    char continue_program;
+//asks user to rerun the program
+void want_to_run_again(string *user_input){
     cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
-    cin >> continue_program;
+    cin >> *user_input;
 
-    //input validation
-    while( !( continue_program == 'y' || continue_program == 'n' ) ){
+    //input validation, only y, n, Y, N are allowed
+    while( !( compare_strings(*user_input, "y") || compare_strings(*user_input, "n") ||
+             compare_strings(*user_input, "Y") || compare_strings(*user_input, "N")) ){
         cout << "Invalid Response, enter a valid one: ";
-        cin >> continue_program;
-    }
-
-    if(continue_program == 'y'){
-        return true;
-    }
-    else{
-        return false;
+        cin >> *user_input;
     }
 }
 
 
-int main(){
-    do{
-        system("cls"); //clears the screen after every successful run
-        cout << "\n\n\t\t\t :: Reversing A String :: \n";
-        cout << "\t    :: You can enter any alphanumeric character ::\n\n";
+int main(void){
+    string continue_program;
 
+    do{
+        refresh_screen();
         string user_input;
         take_input(&user_input);
 
-        int string_size = string_length(user_input);
-        string reversed_string = reverse_string(user_input, string_size);
-
+        string reversed_string = reverse_string(user_input);
         cout << "Reversed String: " << reversed_string << endl;
 
-    }while(want_to_run_again() == true);
-    return 0;
+        want_to_run_again(&continue_program);
+
+    }while( continue_program[0] == 'y' || continue_program[0] == 'Y' );
+    cout << "\n\n\t\tYOU HAVE QUIT THE PROGRAM....!!!\n";
 }
