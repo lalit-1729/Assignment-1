@@ -88,7 +88,7 @@ int main(void){
         take_input(&user_input);
 
         //input validation
-        while(is_input_valid(user_input) == false){
+        while(!is_input_valid(user_input)){
             cout << "Invalid Input, please try again with a valid one:\n";
             take_input(&user_input);
         }
