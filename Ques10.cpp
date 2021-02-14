@@ -1,24 +1,80 @@
 // Here, we are using the quick sort method
 // it is the method, that uses the divide and rule strategy
 // we will implement it by defining the two function
-// partition function, to divide the array across the pivot point in two array , one containing elements smaller than pivot point and other containing the elements greater than pivot point
-// quick sort, uses recursion to perform partition on the sub-arrays
+// 1). perform_partition
+// 2). quick_sort
 
 #include <iostream>
 #include <stdlib.h>
 using namespace std;
 
-//Takes input form the user
-void take_input(string *user_input){
-    cout << "Enter the size of the array: ";
-    cin >> *user_input;
+void refresh_screen(){
+    system("cls"); //To clear the Console window
+    cout << "\n\n\t\t :: Quick Sort :: \n\n\n";
 }
 
-//Takes the array input from the user
-void take_array_input(int *arr, int array_size){
-    cout << "Enter the array elements: \n";
+int string_length(string user_input){
+    int string_size = 0;
+    while(user_input[string_size] != '\0'){
+         string_size++;
+    }
+    return string_size;
+}
+
+bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+    if(string_length(string1) != string_length(string2))
+        return false;
+    else{
+        for(int i = 0; i<string_length(string1) ; i++){
+            if(string1[i] != string2[i])
+                return false;
+        }
+    }
+    return true;
+}
+
+string take_input(){
+    string user_input;
+    cout << "Enter the size of the array: ";
+    cin >> user_input;
+    return user_input;
+}
+
+bool is_array_input_valid(string user_input){
+    int dot_count, i = 0;
+    if(user_input[0] == '-')  //For negative number
+        i++;
+
+    for(i ; user_input[i] != '\0' ; i++){
+        //using the ASCII table to verify, ACSII code for '0'=48 and '9'=57
+        if(user_input[i] < 48 || user_input[i] > 57){
+            if(user_input[i] == '.'){ // For fractional number
+                dot_count++;
+                if(dot_count > 1)
+                    return false;
+                else
+                    continue;
+            }
+            return false;
+        }
+    }
+    return true;
+}
+
+void take_array_input(float *arr, int array_size){
+    cout << "\n\nEnter the array elements, one at a time, And press ENTER after every element: \n";
+    string user_input;
+
     for(int i = 0;i<array_size ; i++){
-        cin >> *(arr+i);
+        printf("arr[%d] = ", i);
+        cin >> user_input;
+
+        //input validation
+        while(!is_array_input_valid(user_input)){
+            cout << "Invalid Input, please enter a valid one: arr[" << i << "] = ";
+            cin >> user_input;
+        }
+        arr[i] = stof(user_input);//converting the valid input string to float
     }
 }
 
@@ -34,17 +90,22 @@ bool is_input_valid(string user_input){
 }
 
 //Prints the sorted array
-void show_sorted_array(int *arr, int array_size){
-    cout << "\nThe sorted Array is: \n";
+void print_array(float *arr, int array_size, string message){
+    cout << message;
     for(int i = 0; i<array_size ; i++){
         cout << *(arr+i)<< " ";
     }
     cout << endl;
 }
 
-//Partition function
-int partition(int arr[], int lower_bound , int upper_bound){
-    int start = lower_bound, end = upper_bound, pivot = arr[lower_bound];
+//Partition function performs very essential part of Quick sort Technique
+//It rearranges the elements in such a way,
+//one side of pivot point contain elements smaller than pivot point and
+//other contains the elements greater than pivot point
+int perform_partition(float arr[], int lower_bound , int upper_bound){
+    int start = lower_bound, end = upper_bound;
+    float pivot = arr[lower_bound];
+
     while(start < end){
         while(arr[start] <= pivot){
             start++;
@@ -63,62 +124,57 @@ int partition(int arr[], int lower_bound , int upper_bound){
     return end;
 }
 
-
-// quick_sort function
-void quick_sort(int arr[], int lower_bound, int upper_bound){
+//The Quick Sort function uses the above Partition function
+//And using recursion performs partition till the whole array is sorted
+void quick_sort(float arr[], int lower_bound, int upper_bound){
     int location;
     if(lower_bound < upper_bound){
-        location = partition(arr, lower_bound, upper_bound);
+        location = perform_partition(arr, lower_bound, upper_bound);
 
         quick_sort(arr, lower_bound, location - 1);
         quick_sort(arr, location + 1, upper_bound);
     }
 }
 
-//Asks user to run again & takes action accordingly
-bool want_to_run_again(){
-    char continue_program;
-    cout << "\nWould you like to run the program again? (y for yes) / (n for no)" << endl;
-    cin >> continue_program;
+//asks user to rerun the program
+void want_to_run_again(string *user_input){
+    cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
+    cin >> *user_input;
 
-    //input validation
-    while( !( continue_program == 'y' || continue_program == 'n' ) ){
-        cout << "Invalid Response, please enter a valid one: ";
-        cin >> continue_program;
-    }
-
-    if(continue_program == 'y'){
-        return true;
-    }
-    else{
-        return false;
+    //input validation, only y, n, Y, N are allowed
+    while( !( compare_strings(*user_input, "y") || compare_strings(*user_input, "n") ||
+             compare_strings(*user_input, "Y") || compare_strings(*user_input, "N")) ){
+        cout << "Invalid Response, enter a valid one: ";
+        cin >> *user_input;
     }
 }
 
-int main(){
+
+//Main Method
+int main(void){
+    string continue_program;
+
     do{
-        system("cls");//clears the console window after every successful run
-        cout << "\n\n\t\t :: Quick Sort :: \n\n\n";
-        string user_input;
-        take_input(&user_input);
+        refresh_screen();
+        string user_input = take_input();
 
         //input validation
-        while(is_input_valid(user_input) == false){
-            cout << "Invalid Input:\n";
-            take_input(&user_input);
+        while(!is_input_valid(user_input)){
+            cout << "Invalid Input, please enter a valid one:\n";
+            user_input = take_input();
         }
 
-        //converting the valid input to integer
-        int array_size = stoi(user_input);
-        int user_array_input[array_size];
+        int array_size = stoi(user_input);   //converting the valid input to integer
+        float user_array_input[array_size];
 
         take_array_input(user_array_input, array_size);
+        print_array(user_array_input, array_size, "The User entered array is:\n");
 
         quick_sort(user_array_input, 0, array_size-1);
-        //Results
-        show_sorted_array(user_array_input, array_size);
+        print_array(user_array_input, array_size, "The sorted array is:\n");//Results
 
-    }while(want_to_run_again() == true);
+        want_to_run_again(&continue_program);
 
-    return 0;
+    }while( continue_program[0] == 'y' || continue_program[0] == 'Y' );
+    cout << "\n\n\t\tYOU HAVE QUIT THE PROGRAM....!!!\n";
 }
