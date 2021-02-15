@@ -6,8 +6,38 @@
 #include <stdlib.h>
 using namespace std;
 
+void refresh_screen(){
+    system("cls"); //To clear the Console window
+    cout << "\n\n\t\t :: Factorial Without Using Recursion :: \n";
+    cout << "\t\t :: Valid output for 0-12 only ::\n\n"; //Due to four byte limit of the int data type
+    //It can be increased by using long long int, but it won't be of use after a certain limit
+}
+
+int string_length(string user_input){
+    int string_size = 0;
+    while(user_input[string_size] != '\0'){
+         string_size++;
+    }
+    return string_size;
+}
+
+bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+    if(string_length(string1) != string_length(string2))
+        return false;
+    else{
+        for(int i = 0; i<string_length(string1) ; i++){
+            if(string1[i] != string2[i])
+                return false;
+        }
+    }
+    return true;
+}
+
+
+
 // factorial function without recursion
-int factorial_of(int number){
+//Simple for loop is used for this purpose
+int compute_factorial(int number){
     int factorial = 1;
     if(number == 0){
         return 1;
@@ -37,45 +67,46 @@ bool is_input_valid(string user_input){
     return true;
 }
 
-//asks user to rerun the program and returns a bool value accordingly
-bool want_to_run_again(){
-    char continue_program;
-    cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
-    cin >> continue_program;
-
-    //input validation
-    while( !( continue_program == 'y' || continue_program == 'n' ) ){
-        cout << "Invalid Response, enter a valid one: ";
-        cin >> continue_program;
-    }
-
-    if(continue_program == 'y'){
+bool is_input_in_range(string user_input){
+    int number = stoi(user_input);
+    if(number <= 12)
         return true;
-    }
-    else{
+    else
         return false;
+}
+
+void want_to_run_again(string *user_input){
+    cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
+    cin >> *user_input;
+
+    //input validation, only y, n, Y, N are allowed
+    while( !( compare_strings(*user_input, "y") || compare_strings(*user_input, "n") ||
+             compare_strings(*user_input, "Y") || compare_strings(*user_input, "N")) ){
+        cout << "Invalid Response, enter a valid one: ";
+        cin >> *user_input;
     }
 }
 
 
-int main(){
-    do{
-        system("cls"); // clears the screen after every successful run
-        cout << "\n\n\t\t :: Factorial Without Recursion :: \n\n";
+int main(void){
+    string continue_program;
 
+    do{
+        refresh_screen();
         string user_input;
         take_input(&user_input);
 
         //input validation
-        while(!is_input_valid(user_input)){
+        while(!is_input_valid(user_input) || !is_input_in_range(user_input)){
             cout << "Invalid input, please try again with a valid one.\n";
             take_input(&user_input);
         }
 
         int number = stoi(user_input); //converting the valid input string to integer
-        cout << endl << "Factorial of " << number << " is " << factorial_of(number) << endl;
+        cout << endl << "Factorial of " << number << " is " << compute_factorial(number) << endl;
 
-    }while(want_to_run_again() == true);
+        want_to_run_again(&continue_program);
 
-    return 0;
+    }while( continue_program[0] == 'y' || continue_program[0] == 'Y' );
+    cout << "\n\n\t\tYOU HAVE QUIT THE PROGRAM....!!!\n";
 }
