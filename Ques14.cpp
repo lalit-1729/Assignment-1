@@ -6,7 +6,32 @@
 #include <stdlib.h>
 using namespace std;
 
-//Takes the input from the user
+void refresh_screen(){
+    system("cls"); //To clear the Console window
+    cout << "\n\n\t\t :: FIBONACCI Sequence :: \n";
+    cout << "\t\t :: Range of input is 0 to 48 ::\n\n"; //Due to 4-byte limit of the unsigned int
+}
+
+int string_length(string user_input){
+    int string_size = 0;
+    while(user_input[string_size] != '\0'){
+         string_size++;
+    }
+    return string_size;
+}
+
+bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+    if(string_length(string1) != string_length(string2))
+        return false;
+    else{
+        for(int i = 0; i<string_length(string1) ; i++){
+            if(string1[i] != string2[i])
+                return false;
+        }
+    }
+    return true;
+}
+
 void take_input(string *user_input){
     cout << "Enter a Number: ";
     cin >> *user_input;
@@ -23,30 +48,19 @@ bool is_number_valid(string user_input){
     return true;
 }
 
-//Asks the user to rerun the program and returns bool value accordingly
-bool want_to_run_again(){
-    char continue_program;
-    cout << "\n\nWould you like to run the program again? (y for yes) / (n for no)" << endl;
-    cin >> continue_program;
-
-    //input validation
-    while( !( continue_program == 'y' || continue_program == 'n' ) ){
-        cout << "Invalid Response, enter a valid one: ";
-        cin >> continue_program;
-    }
-
-    if(continue_program == 'y'){
+bool is_input_in_range(string user_input){
+    int number = stoi(user_input);
+    if(number <= 48)
         return true;
-    }
-    else{
-        cout << "\n\n\t\tYOU JUST QUIT THE PROGRAM...!!!" << endl;
+    else
         return false;
-    }
 }
 
 //prints the first n terms of the Fibonacci Sequence
-void print_fibonacci_pattern(int number){
-    int next_term = 0, temp_term = 1, previous_term = 0;
+//In the Fibonacci Sequence the next term is given as a sum of previous two terms
+void print_fibonacci_pattern(short int number){
+    cout << "\nThe Fibonacci sequence of n terms is: \n\n";
+    unsigned int next_term = 0, temp_term = 1, previous_term = 0;
 
     for(int term = 0; term<number ; term++){
         next_term +=  previous_term;
@@ -58,25 +72,37 @@ void print_fibonacci_pattern(int number){
     return;
 }
 
-int main(){
-    do{
-        system("cls"); //clearing the console window after every successful run
-        cout << "\n\n\t\t :: FIBONACCI PATTERN :: \n\n";
+void want_to_run_again(string *user_input){
+    cout << "\n\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
+    cin >> *user_input;
 
+    //input validation, only y, n, Y, N are allowed
+    while( !( compare_strings(*user_input, "y") || compare_strings(*user_input, "n") ||
+             compare_strings(*user_input, "Y") || compare_strings(*user_input, "N")) ){
+        cout << "Invalid Response, enter a valid one: ";
+        cin >> *user_input;
+    }
+}
+
+
+int main(void){
+    string continue_program;
+
+    do{
+        refresh_screen();
         string user_input;
         take_input(&user_input);
 
         //input validation
-        while(is_number_valid(user_input) == false){
+        while(!is_number_valid(user_input) || !is_input_in_range(user_input)){
             cout << "Invalid input, please try again with a valid one,\n";
             take_input(&user_input);
         }
 
-        int n = stoi(user_input); //converting a valid user string to integer
-        cout << "The required patterns is: \n";
+        short int n = stoi(user_input); //converting a valid user string to integer
         print_fibonacci_pattern(n);
+        want_to_run_again(&continue_program);
 
-    }while(want_to_run_again() == true);
-
-    return 0;
+    }while( continue_program[0] == 'y' || continue_program[0] == 'Y' );
+    cout << "\n\n\t\tYOU HAVE QUIT THE PROGRAM....!!!\n";
 }
