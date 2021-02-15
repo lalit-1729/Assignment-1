@@ -5,6 +5,31 @@
 #include <stdlib.h>
 using namespace std;
 
+void refresh_screen(){
+    system("cls"); //To clear the Console window
+    cout << "\n\n\t\t :: Check For A Leap Year ::\n\n";
+}
+
+int string_length(string user_input){
+    int string_size = 0;
+    while(user_input[string_size] != '\0'){
+         string_size++;
+    }
+    return string_size;
+}
+
+bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+    if(string_length(string1) != string_length(string2))
+        return false;
+    else{
+        for(int i = 0; i<string_length(string1) ; i++){
+            if(string1[i] != string2[i])
+                return false;
+        }
+    }
+    return true;
+}
+
 //Takes the input from the user
 void take_input(string *user_input){
     cout << "Enter a year: ";
@@ -14,7 +39,7 @@ void take_input(string *user_input){
 //validating only non-negative integers
 bool is_input_valid(string user_input){
     for(int i = 0; user_input[i] != '\0' ; i++){
-        // using the ACSII code for validation
+        // using the ACSII code to validate only numeric charcaters
         if(user_input[i] < 48 || user_input[i] > 57){
             return false;
         }
@@ -22,47 +47,37 @@ bool is_input_valid(string user_input){
     return true;
 }
 
-//check for the leap year and displays the result
+//Leap year is a year in which has 366 days
+//A leap year is always divisible by 4
+//but if a year is a multiple of 100 then to be a leap year
+//it should also be divisible by 400
 void check_for_leap_year(int year){
 
-    if(year%100 == 0 && year%400 == 0){
+    if( (year%100 == 0 && year%400 == 0) || (year%4 ==0 && year%100 != 0) )
         cout << "This is a Leap year." << endl;
-        }
-    else if( year%4 ==0 && year%100 != 0 ){
-        cout << "This is a Leap year." << endl;
-    }
-    else{
+    else
         cout << "This is not a leap year." << endl;
-    }
     return;
 }
 
-//asks user to rerun the program and takes action accordingly
-bool want_to_run_again(){
-    char continue_program;
-    cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
-    cin >> continue_program;
+//Asking the user to run again
+void want_to_run_again(string *user_input){
+    cout << "\n\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
+    cin >> *user_input;
 
-    //input validation
-    while( !( continue_program == 'y' || continue_program == 'n' ) ){
+    //input validation, only y, n, Y, N are allowed
+    while( !( compare_strings(*user_input, "y") || compare_strings(*user_input, "n") ||
+             compare_strings(*user_input, "Y") || compare_strings(*user_input, "N")) ){
         cout << "Invalid Response, enter a valid one: ";
-        cin >> continue_program;
-    }
-
-    if(continue_program == 'y'){
-        return true;
-    }
-    else{
-        return false;
+        cin >> *user_input;
     }
 }
 
-
 int main(){
+    string continue_program;
 
     do{
-        system("cls"); //clear the console after every successful run
-        cout << "\n\n\t\t :: Check For A Leap Year ::\n\n";
+        refresh_screen();
         string user_input;
         take_input(&user_input);
 
@@ -74,8 +89,8 @@ int main(){
 
         int year = stoi(user_input);// converting a valid input string to integer
         check_for_leap_year(year);
+        want_to_run_again(&continue_program);
 
-    }while(want_to_run_again() == true);
-
-    return 0;
+    }while( continue_program[0] == 'y' || continue_program[0] == 'Y' );
+    cout << "\n\n\t\tYOU HAVE QUIT THE PROGRAM....!!!\n";
 }
