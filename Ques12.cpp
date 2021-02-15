@@ -9,7 +9,8 @@ using namespace std;
 void refresh_screen(){
     system("cls"); //To clear the Console window
     cout << "\n\n\t\t :: PASCAL'S TRIANGLE :: \n";
-    cout << "\t\t:: Valid output for 1-14 only ::\n\n";
+    cout << "\t\t:: Valid output for 0-12 only ::\n\n"; //Due to four byte limit of the int data type
+    //It can be increased by using long long int, but it won't be of use after a certain limit
 }
 
 int string_length(string user_input){
@@ -51,7 +52,7 @@ bool is_input_valid(string user_input){
 
 bool is_input_in_range(string user_input){
     int number = stoi(user_input);
-    if(number <= 14)
+    if(number <= 12)
         return true;
     else
         return false;
@@ -112,7 +113,7 @@ void want_to_run_again(string *user_input){
 }
 
 
-int main(){
+int main(void){
     string continue_program;
 
     do{
