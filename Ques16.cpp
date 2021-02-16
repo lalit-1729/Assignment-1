@@ -1,18 +1,43 @@
-//This program checks whether the provide number is a Armstrong number or not
+//This program takes the input from the user
+//Validates it and checks whether the input is
+// Armstrong number or not
 
 #include <iostream>
 #include <stdlib.h>
 using namespace std;
 
-//defining the power function
+void refresh_screen(){
+    system("cls"); //To clear the Console window
+    cout << "\n\n\t\t :: Armstrong Number ::\n\n";
+}
+
+int string_length(string user_input){
+    int string_size = 0;
+    while(user_input[string_size] != '\0'){
+         string_size++;
+    }
+    return string_size;
+}
+
+bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+    if(string_length(string1) != string_length(string2))
+        return false;
+    else{
+        for(int i = 0; i<string_length(string1) ; i++){
+            if(string1[i] != string2[i])
+                return false;
+        }
+    }
+    return true;
+}
+
+
 int power(int base, int exponent){
 
-    if(exponent == 0){
+    if(exponent == 0)
         return 1;
-    }
-    else{
+    else
         return base*power(base, exponent-1);
-    }
 }
 
 //takes the input from user
@@ -32,18 +57,18 @@ bool is_number_valid(string user_input){
     return true;
 }
 
-//counts the no of digits
-int count_digits(int number){
-    int no_of_digits = 0;
-    while(number != 0){
-            no_of_digits++;
-            number /= 10;
-    }
+int count_no_of_digits(int number){
+    int no_of_digits;
+    //Reducing the number of lines for the code using
+    //for loop in which two condition are given at a time
+    for(no_of_digits = 0; number != 0;no_of_digits++, number /= 10);
     return no_of_digits;
 }
 
-//sums the digits of the input number with the power as no. of digits of input number
-int sum_for_armstrong_number(int number, int no_of_digits){
+//Sum for n-digits Armstrong number is evaluated as the
+//sum of each digit with the power of n
+int sum_for_armstrong_number(int number){
+    int no_of_digits = count_no_of_digits(number);
     int sum = 0;
     for(int i = 0; i<no_of_digits; i++){
         int digit = number%10;
@@ -53,42 +78,36 @@ int sum_for_armstrong_number(int number, int no_of_digits){
     return sum;
 }
 
-//asks user to rerun the program and takes action accordingly
-bool want_to_run_again(){
-    char continue_program;
-    cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
-    cin >> continue_program;
-
-    //input validation
-    while( !( continue_program == 'y' || continue_program == 'n' ) ){
-        cout << "Invalid Response, enter a valid one: ";
-        cin >> continue_program;
-    }
-
-    if(continue_program == 'y'){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-//checks for amrstrong number and displays the result
+//A number is a armstrong number if the above
+//evaluated sum is equal to the number itself
 void check_for_armstrong_number(int sum, int number){
-    if(sum == number){
-        cout << "The given number is a Armstrong Number\n";
-    }
-    else{
-        cout << "The given number is not a Armstrong Number\n";
-    }
-    return;
+    if(sum == number)
+        cout << "The number is a Armstrong Number\n";
+    else
+        cout << "The number is NOT a Armstrong Number\n";
 }
+
+//asks user to rerun the program
+void want_to_run_again(string *user_input){
+    cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
+    cin >> *user_input;
+
+    //input validation, only y, n, Y, N are allowed
+    while( !( compare_strings(*user_input, "y") || compare_strings(*user_input, "n") ||
+             compare_strings(*user_input, "Y") || compare_strings(*user_input, "N")) ){
+        cout << "Invalid Response, enter a valid one: ";
+        cin >> *user_input;
+    }
+}
+
+
 
 
 int main(){
+    string continue_program;
+
     do{
-        system("cls");//clears the console after every successful run
-        cout << "\n\n\t\t :: Armstrong Number ::\n\n";
+        refresh_screen();
         string user_input;
         take_input(&user_input);
 
@@ -99,11 +118,11 @@ int main(){
         }
 
         int valid_input_number = stoi(user_input); // converting a valid string to integer
-        int no_of_digits = count_digits(valid_input_number);
-        int sum = sum_for_armstrong_number(valid_input_number, no_of_digits);
+        int sum = sum_for_armstrong_number(valid_input_number);
+        check_for_armstrong_number(sum, valid_input_number);
 
-        check_for_armstrong_number(sum, valid_input_number);//results
-    }while(want_to_run_again() == true);
+        want_to_run_again(&continue_program);
 
-    return 0;
+    }while( continue_program[0] == 'y' || continue_program[0] == 'Y' );
+    cout << "\n\n\t\tYOU HAVE QUIT THE PROGRAM....!!!\n";
 }
