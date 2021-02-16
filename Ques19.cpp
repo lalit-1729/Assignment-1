@@ -1,15 +1,43 @@
 //program reads the text from the .txt file or similar files
-//gives the number of the lines in the .txt files
+//gives the number of the lines in the files
+//Or returns error if the files is not found
 
 #include <iostream>
 #include <stdlib.h>
 using namespace std;
 
-//Reads the text from the file
+void refresh_screen(){
+    system("cls"); //To clear the Console window
+    cout << "\n\n\t\t :: Counting No Of Lines In A File :: \n\n";
+}
+
+int string_length(string user_input){
+    int string_size = 0;
+    while(user_input[string_size] != '\0'){
+         string_size++;
+    }
+    return string_size;
+}
+
+bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+    if(string_length(string1) != string_length(string2))
+        return false;
+    else{
+        for(int i = 0; i<string_length(string1) ; i++){
+            if(string1[i] != string2[i])
+                return false;
+        }
+    }
+    return true;
+}
+
+//This function reads the text from the file
+//To do so it reads it by fetching a single letter from the text
+//Till the EOF (end of file) and stores it in a string
 string read_text_from_file(FILE *file){
-    // getting the first character
-    char single_character= fgetc(file);
+    char single_character= fgetc(file);// getting the first character
     string file_text;
+
     // checking for the end of the file, EOF == End of file
     while(single_character != EOF){
         file_text += single_character;
@@ -18,13 +46,12 @@ string read_text_from_file(FILE *file){
     return file_text;
 }
 
-//Asks to display the text from the file, and if yes then it displays it
 void display_text(string file_text){
-    char display_text;
-    cout << "would you like to display the text...?? (y for yes) / ( anything else for no)\n";
-    cin >> display_text;
-    if(display_text == 'y'){
-        cout << "The text of file is: \n\n---------------------------------------Start\n";
+    string display_file_text;
+    cout << "would you like to display the text...?? (y for yes) / ( anything else for no )\n";
+    cin >> display_file_text;
+    if(compare_strings(display_file_text,"y") || compare_strings(display_file_text, "y")){
+        cout << "The text of file is: \n\nStart---------------------------------------\n";
         cout << file_text;
         cout << "\n---------------------------------------End";
     }
@@ -34,55 +61,50 @@ void display_text(string file_text){
 //no of lines function
 int count_no_of_lines(string funciton_string){
     int no_of_lines = 0;
+
     for(int i = 0;funciton_string[i] != '\0'; i++){
-        if(funciton_string[i] == '\n'){
+        if(funciton_string[i] == '\n')
             no_of_lines++;
-        }
     }
     return no_of_lines+1; // adding one for the last line
 }
 
-//Asks the user to rerun and returns the bool value accordingly
-bool want_to_run_again(){
-    char continue_program;
+//asks user to rerun the program
+void want_to_run_again(string *user_input){
     cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
-    cin >> continue_program;
+    cin >> *user_input;
 
-    //input validation
-    while( !( continue_program == 'y' || continue_program == 'n' ) ){
+    //input validation, only y, n, Y, N are allowed
+    while( !( compare_strings(*user_input, "y") || compare_strings(*user_input, "n") ||
+             compare_strings(*user_input, "Y") || compare_strings(*user_input, "N")) ){
         cout << "Invalid Response, enter a valid one: ";
-        cin >> continue_program;
+        cin >> *user_input;
     }
-
-    if(continue_program == 'y'){
-        return true;
-    }
-    cout << "\n\t\tYou just Quit the program...!!\n\n";
-    return false;
 }
 
 int main(){
-    do{
-        system("cls");//Clears the console window after every successful run
-        cout << "\n\n\t\t :: Counting No Of Lines In A File :: \n\n";
+    string continue_program;
 
+    do{
+        refresh_screen();
         char filename[50];
         cout << "Enter the name of the file: " << endl;
         cin >> filename;
 
-        FILE *file;
+        FILE *file; //File pointer
         file = fopen(filename, "r");
-        if( file == NULL){
-            cout << "File not found, please try again:";
-        }
+
+        if( file == NULL)
+            cout << "File not found, please try again:\n\n";
         else{
             string file_text = read_text_from_file(file);
             display_text(file_text);
-            cout << "\n\n\nNumber of new lines in the file provided are: ";
+            cout << "\n\n\nNumber of lines in the file provided are: ";
             cout << count_no_of_lines(file_text);
         }
 
-    }while(want_to_run_again() == true);
+        want_to_run_again(&continue_program);
 
-    return 0;
+    }while( continue_program[0] == 'y' || continue_program[0] == 'Y' );
+    cout << "\n\n\t\tYOU HAVE QUIT THE PROGRAM....!!!\n";
 }
