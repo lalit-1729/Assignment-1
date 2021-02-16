@@ -5,7 +5,31 @@
 #include <stdlib.h>
 using namespace std;
 
-//Takes the user input
+void refresh_screen(){
+    system("cls"); //To clear the Console window
+    cout << "\n\n\t\t :: MAXIMUM OCCURENCE :: \n\n";;
+}
+
+int string_length(string user_input){
+    int string_size = 0;
+    while(user_input[string_size] != '\0'){
+         string_size++;
+    }
+    return string_size;
+}
+
+bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+    if(string_length(string1) != string_length(string2))
+        return false;
+    else{
+        for(int i = 0; i<string_length(string1) ; i++){
+            if(string1[i] != string2[i])
+                return false;
+        }
+    }
+    return true;
+}
+
 string take_input(){
     string user_input;
     cout << "Enter a String: ";
@@ -13,86 +37,78 @@ string take_input(){
     return user_input;
 }
 
-//Computes string length
-int string_length(string user_input){
-    int length;
-    for(length = 0; user_input[length] != '\0';  length++);
-    return length;
-}
-
-//Counts the frequency of occurence of every character in the string
-void count_frequency(int *arr, string user_input, int len){
+//Counts the frequency of occurence of each and
+//very character in the string
+//Each character's frequency is stored at the ASCII code index
+//of the counting array
+void count_frequency(int *arr, string user_input){
+    int user_input_length = string_length(user_input);
     int temp_ascii_code;
-    for(int index = 0; index < len ; index++){
-        temp_ascii_code = user_input[index]; //Converting to ASCII CODE
-        *(arr + temp_ascii_code) += 1;
-    }
-}
 
-//Looks for the multiple characters having same max frequency
-void look_for_multiple_max_frequency(int *counting_array, int max_no){
-    for(int i = 0; i<200 ; i++){
-        if(*(counting_array + i) ==  max_no){
-            cout << char(i) << ", ";
-        }
+    for(int index = 0; index < user_input_length ; index++){
+        temp_ascii_code = user_input[index]; //Converting to ASCII CODE
+        arr[temp_ascii_code] += 1;
     }
 }
 
 //Fetches the max frequency
-int fetch_max_frequency(int *counting_array, int *max_no){
+int fetch_max_frequency(int *counting_array, int *max_frequency){
     int previous_max;
     int index = 0;
     for(int i = 0; i<200 ; i++){
-        *max_no = max(*max_no, *(counting_array + i));
-        if(previous_max < *max_no){
+        *max_frequency = max(*max_frequency, counting_array[i]);
+        if(previous_max < *max_frequency)
             index = i;
-        }
-        previous_max = *max_no;
+        previous_max = *max_frequency;
     }
     return index;
 }
 
-//Asking user to rerun and returning the bool value accordingly
-bool want_to_run_again(){
-    char continue_program;
-    cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
-    cin >> continue_program;
-
-    //input validation, validates only lowercase 'y' & 'n'
-    while( !( continue_program == 'y' || continue_program == 'n' ) ){
-        cout << "Invalid Response, enter a valid one: ";
-        cin >> continue_program;
-    }
-
-    if(continue_program == 'y'){
-        return true;
-    }
-    else{
-        cout << "\n\n\t\t\t YOU JUST QUIT THE PROGRAM...!!!\n\n";
-        return false;
+//This function is useful when there are multiple characters
+//Having the maximum frequency
+void look_for_multiple_max_frequency(int *counting_array, int max_frequency){
+    for(int i = 0; i<200 ; i++){
+        if(*(counting_array + i) ==  max_frequency)
+            cout << char(i) << ", ";
     }
 }
 
-int main(){
+
+//asks user to rerun the program
+void want_to_run_again(string *user_input){
+    cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
+    cin >> *user_input;
+
+    //input validation, only y, n, Y, N are allowed
+    while( !( compare_strings(*user_input, "y") || compare_strings(*user_input, "n") ||
+             compare_strings(*user_input, "Y") || compare_strings(*user_input, "N")) ){
+        cout << "Invalid Response, enter a valid one: ";
+        cin >> *user_input;
+    }
+}
+
+
+//Main Method
+int main(void){
+    string continue_program;
+
     do{
-        system("cls");//Clears the console window after every successful run
-        cout << "\n\n\t\t :: MAXIMUN OCCURENCE :: \n\n";
+        refresh_screen();
         string user_input = take_input();
 
-        int user_input_length = string_length(user_input);
-
-        // counting the frequency of characters of the string
-        int counting_array[200] = {0};
-        count_frequency(counting_array, user_input, user_input_length);
+        int counting_array[200] = {0}; //All frequencies are initialized as 0
+        count_frequency(counting_array, user_input);
 
         // finding the max frequency
-        int max_no = counting_array[0];
-        int index = fetch_max_frequency(counting_array, &max_no);
+        int max_frequency = counting_array[0];
+        int index = fetch_max_frequency(counting_array, &max_frequency);
 
         cout << endl << "The character that occurs maximum time is: ";
-        look_for_multiple_max_frequency(counting_array, max_no);
-        cout << " which occurs for " << max_no << " times.\n";
+        look_for_multiple_max_frequency(counting_array, max_frequency);
+        cout << " which occurs for " << max_frequency << " times.\n";
 
-    }while(want_to_run_again() == true);
-    return 0;
+        want_to_run_again(&continue_program);
+
+    }while( continue_program[0] == 'y' || continue_program[0] == 'Y' );
+    cout << "\n\n\t\tYOU HAVE QUIT THE PROGRAM....!!!\n";
 }
