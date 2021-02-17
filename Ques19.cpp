@@ -19,6 +19,8 @@ int string_length(string user_input){
     return string_size;
 }
 
+//This function is declared here to fixed the bug in the run-again loop
+//As two strings can't be simple compared by str1 == str2, therefore this function is declared to compare the strings
 bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
     if(string_length(string1) != string_length(string2))
         return false;
@@ -50,6 +52,7 @@ void display_text(string file_text){
     string display_file_text;
     cout << "would you like to display the text...?? (y for yes) / ( anything else for no )\n";
     cin >> display_file_text;
+
     if(compare_strings(display_file_text,"y") || compare_strings(display_file_text, "y")){
         cout << "The text of file is: \n\nStart---------------------------------------\n";
         cout << file_text;
@@ -58,7 +61,9 @@ void display_text(string file_text){
 }
 
 
-//no of lines function
+//This function will count new line using the text of the file,
+//this function will go through each character of the text and look for new line character,
+//i.e. '\n', if it finds it its gonna increment the no of lines
 int count_no_of_lines(string funciton_string){
     int no_of_lines = 0;
 
@@ -94,7 +99,7 @@ int main(){
         FILE *file; //File pointer
         file = fopen(filename, "r");
 
-        if( file == NULL)
+        if( file == NULL ) //If the file is not found or file name is incorrect
             cout << "File not found, please try again:\n\n";
         else{
             string file_text = read_text_from_file(file);
