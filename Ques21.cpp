@@ -264,7 +264,7 @@ int main(){
     do{
         refresh_screen();
         int data;
-        struct node head; //Head node, this will represent thew whole list
+        struct node head; //Head node, this will represent the whole list
         create_linked_list(&head);
 
         cout << "\nThe list after extending is as follows: " << endl;
