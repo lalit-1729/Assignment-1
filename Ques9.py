@@ -7,10 +7,29 @@ class Matrix:
         self.column = column
 
     def matrix_input(self):
-        self.matrix = [input().split(' ', self.column) for i in range(self.row)]
+        #Initializing a rows x columns matrix with all elements equal to 0
+        self.matrix = [[0 for i in range(self.column)] for j in range(self.row)]
+        
+        #this function will take the input for a single element of the matrix 
+        #And will also validate the input as a integer only
+        def element_input(message):
+            print(message, end=" ")
+            user_input = 0
+            #input validation
+            while True:
+                try:
+                    user_input = input()
+                    user_input = int(user_input)
+                    break
+                except ValueError: #this will take the input from the user
+                    print("Invalid Integer, please try again with a valid one:")
+                    print(message, end=" ")
+            return user_input
+        
         for i in range(self.row):
             for j in range(self.column):
-                self.matrix[i][j] = int(self.matrix[i][j])
+                message = "Matrix Element[{fi}][{fj}]:".format(fi=i, fj=j)
+                self.matrix[i][j] = element_input(message)
         return self.matrix
 
     def multiply(self, matB):
@@ -19,27 +38,31 @@ class Matrix:
         col_A = len(self.matrix[0])
         col_B = len(matB[0])
         self.multiplied_matrix = []
-
+        
+        #this function perfroms the multiplication on the matrix provided
+        #here we will append a row with sum of product of elements of the row and column 
+        #and then this row will be later appended in the multiplied matrix
         for i in range(row_A):
-            row = []
+            row = [] 
             for j in range(col_B):
                 sum = 0
                 for k in range(row_B):
                     sum += self.matrix[i][k]*matB[k][j]
                 row.append(sum)
             self.multiplied_matrix.append(row)
+            
         return self.multiplied_matrix
 
-def take_input(matrix_name):
-    print("Enter the rows and columns of matrix of ", matrix_name," :")
-    rows , columns = 0,0
+def take_positive_input(message):
+    print(message, end = ' ')
+    user_input = 0
+    
     #input validation
     while True:
         try:
-            user_input1, user_input2 = input().split(' ', 2)
-            rows = int(user_input1)
-            columns = int(user_input2)
-            if rows < 1 or columns < 1:
+            user_input = input()
+            user_input = int(user_input)
+            if user_input < 1:
                 print("Positive integer only ,please try again with a valid one:")
                 continue
             else:
@@ -47,50 +70,66 @@ def take_input(matrix_name):
         except ValueError:
             print("Invalid Integer, please try again with a valid one:")
             
-    return rows, columns
+    return user_input
 
-def print_matrix(matrix):
+#This function will print the matrix in its traditional manner
+#i.e. in the tabular form
+def print_matrix(matrix, message):
+    print(message)
     rows = len(matrix)
     columns = len(matrix[0])
+    
     for i in range(rows):
-        print(end ="\n")
         for j in range(columns):
-            print(multiplied_matrix[i][j], end = " ")
+            print(matrix[i][j], end = " ")
+        print(end ="\n") #
     
 
 continue_program = 'y'
-while(continue_program == 'y'):
+while(continue_program == 'y' or continue_program == 'Y'):
     system("cls")#clears the console window
-
     print("\n\n\t\t :: MATRIX MULTIPLICATION USING OOP :: \n\n  ")
-    rows_A, columns_A = take_input('A')
-    rows_B, columns_B = take_input('B')
+    
+    #taking input for all the required rows and columns 
+    #and the validation is being done simultaneously 
+    rows_A = take_positive_input("Enter the no of ROWS of matrix A: ")
+    columns_A = take_positive_input("Enter the no of COLUMNS of matrix A: ")
+    rows_B = take_positive_input("Enter the no of ROWS of matrix B: ")
+    columns_B = take_positive_input("Enter the no of COLUMNS of matrix A: ")
     
     #Verifying the required condition for the matrix multiplication
+    #i.e. the no fo columns of first matrix must be equal to no of rows of the second matrix
     while columns_A != rows_B:
         print("\nThe no. of rows of matrix A is not matching with the no. of columns, please try again with a valid onoe:")
-        rows_A, columns_A = take_input('A')
-        rows_B, columns_B = take_input('B')
+        rows_A = take_positive_input("Enter the no of ROWS of matrix A: ")
+        columns_A = take_positive_input("Enter the no of COLUMNS of matrix A: ")
+        rows_B = take_positive_input("Enter the no of ROWS of matrix B: ")
+        columns_B = take_positive_input("Enter the no of COLUMNS of matrix A: ")
         
     matrix_A =  Matrix(rows_A, columns_A)
-    print("Enter the matrix A: ")
+    print("\n\nEnter the elements of matrix A, press ENTER after every entry: ")
     matrix_A.matrix_input()
 
     matrix_B =  Matrix(rows_B, columns_B)
-    print("Enter the matrix B: ")
+    print("\n\nEnter the elements of matrix B, press ENTER after every entry: ")
     matrix_B.matrix_input()
 
     #matrix_multiplication
     multiplied_matrix = matrix_A.multiply(matrix_B.matrix)
 
-    #result output
-    print("\n The multiplied matrix is: ")
-    print_matrix(multiplied_matrix)
+    #printing all the entered matrix and the multiplied matrix
+    #for better interpretation 
+    system("cls")#clears the console window
+    print("\n\n\t\t :: MATRIX MULTIPLICATION USING OOP :: \n")
+    print_matrix(matrix_A.matrix,"\nMatrix A: ")
+    print_matrix(matrix_B.matrix,"\nMatrix B: ")
+    print_matrix(multiplied_matrix,"\nThe multiplied matrix is: ")
     
     #asking user to rerun
-    continue_program = input("\nWould you like to rerun the program...?? (y for yes)/ (n for no)\n")
-    while not (continue_program == 'y' or continue_program == 'n'):
-        print("Invalid input, please try again with a valid one:")
-        continue_program = input("\n\nWould you like to rerun the program...?? (y for yes)/ (n for no)")
+    continue_program = input("\nWould you like to rerun the program...?? (y for yes)/ (n for no)\n ")
+    while not (continue_program == 'y' or continue_program == 'n'
+               or continue_program == 'N' or continue_program == 'Y'):
+        print("Invalid input, please try again with a valid one: ", end=" ")
+        continue_program = input()
         
 print("\n\n\t\t YOU JUST QUIT THE PROGRAM....!!!")
