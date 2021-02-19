@@ -19,7 +19,9 @@ int string_length(string user_input){
     return string_size;
 }
 
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/* Similar to that of 'strcmp' function of string.h, here we are comparing every single character of both string
+   this function will will used later in the program run-again loop for input validation */
+bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -36,10 +38,13 @@ void take_input(string *user_input){
     cin >> *user_input;
 }
 
+/* This function will reverse the string */
 string reverse_string(string user_input){
     int string_size = string_length(user_input);
     string reversed_string = user_input; //having a string of same length to changes it later
+
     for(int i = 1; i <= string_size ; i++){
+        //the last element of user input is assigned to the first element of  reversed string and so on
         reversed_string[string_size - i] = user_input[i-1];
     }
     return reversed_string;
@@ -59,6 +64,7 @@ void want_to_run_again(string *user_input){
 }
 
 
+//Main Method
 int main(void){
     string continue_program;
 
