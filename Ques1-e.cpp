@@ -8,7 +8,7 @@ using namespace std;
 
 void refresh_screen(){
     system("cls"); //To clear the screen
-    cout << "\n\n\t\t:: Printing The Fibonacci Sequence Less Than m ::";
+    cout << "\n\n\t\t:: Printing The Fibonacci Sequence <= m ::"; //Program introduction
     cout << "\n\t\t   Sample pattern, for m = 6 ::: 0 1 1 2 3 5\n\n";
 }
 
@@ -18,6 +18,8 @@ int string_length(string function_string){
     return string_len;
 }
 
+/* Similar to that of 'strcmp' function of string.h, here we are comparing every single character of both string
+   this function will will used later in the program run-again loop for input validation to fix the bug*/
 bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
@@ -31,10 +33,14 @@ bool compare_strings(string string1, string string2){
 }
 
 void take_input(string *user_input){
-    cout << "Enter the number of rows of patterns: "<< endl;
+    cout << "Enter the maximum term of the sequence: "<< endl;
     cin >> *user_input;
 }
 
+/* The no of terms can't be negative or fractional,
+   therefore for the validation of the of the input this function is used,
+   this function will take string as a argument to check each characters ASCII code is in range or not
+   and will return the bool value accordingly */
 bool is_input_valid(string user_input){
     for(int i = 0; user_input[i] != '\0' ; i++){
         // using the ACSII code to look for only numeric character
@@ -45,16 +51,18 @@ bool is_input_valid(string user_input){
 }
 
 // function to print the Fibonacci pattern
-void print_fibonacci_pattern(int no_of_terms){
-    int next_term = 0, previous_term = 1, temp_term = 0;
+// In Fibonacci sequence the next term is the sum of the previous two terms
+void print_fibonacci_pattern(int n_max){
+    int next_term = 0, previous_term1 = 1, previous_term2 = 0;
+
     for(int term = 0;  ; term++){
-        if(next_term > no_of_terms)
+        if(next_term > n_max)
             break;
 
         cout << next_term << ' ';
-        previous_term +=  temp_term;
-        temp_term = next_term;
-        next_term = previous_term;
+        previous_term1 +=  previous_term2; //Adding previous two terms
+        previous_term2 = next_term;
+        next_term = previous_term1;        //next term is the given the sum of previous two terms
     }
     return;
 }
