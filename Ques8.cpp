@@ -8,7 +8,8 @@ using namespace std;
 
 void refresh_screen(){
     system("cls"); //To clear the Console window
-    cout << "\n\n\t\t :: MATRIX MULTIPLICATION :: \n\n\n";
+    cout << "\n\n\t\t :: MATRIX MULTIPLICATION :: \n";
+    cout << "\t :: The matrix elements must be positive ::\n\n";
 }
 
 int string_length(string user_input){
@@ -56,13 +57,6 @@ bool is_input_real_number(string user_input){
     for(i; user_input[i] != '\0' ; i++){
         // using the ACSII code for validation
         if(user_input[i] < 48 || user_input[i] > 57){
-            if(user_input[i] == '.'){ // For fractional number, only one dot is permissible
-                dot_count++;
-                if(dot_count > 1)
-                    return false;
-                else
-                    continue;
-            }
             return false;
         }
     }
@@ -155,6 +149,7 @@ void want_to_run_again(string *user_input){
 }
 
 //Main Method
+
 int main(){
     string continue_program;
 
@@ -174,7 +169,7 @@ int main(){
             int ncols_a, nrows_a, ncols_b , nrows_b;
             nrows_a = take_only_positive_input("Enter no of rows of matrix A: ");
             ncols_a = take_only_positive_input("Enter no of columns of matrix A: ");
-            nrows_b = take_only_positive_input("Enter no of rows of matrix B ");
+            nrows_b = take_only_positive_input("Enter no of rows of matrix B: ");
             ncols_b = take_only_positive_input("Enter no of columns of matrix B: ");
         }
 
