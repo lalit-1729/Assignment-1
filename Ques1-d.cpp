@@ -9,6 +9,11 @@
 //   $$$$$$$    |
 //  $$$$$$$$$   |
 // $$$$$$$$$$$  |
+//  $$$$$$$$$   |
+//   $$$$$$$    |
+//    $$$$$     |
+//     $$$      |
+//      $       |
 //--------------+
 
 #include <iostream>
@@ -17,7 +22,7 @@ using namespace std;
 
 void refresh_screen(){
     system("cls"); //To clear the screen
-    cout << "\n\n\t\tSample pattern, for m = 4:\n\t\t      :    *\n\t\t\t  ***\n\t\t\t *****\n\t\t\t******* :\n\n"; // Program introduction
+    cout << "\n\n\t\t :: Pattern Printing ::\n\t\tSample pattern, for m = 3:\n\t\t      :   *\n\t\t\t ***\n\t\t\t*****\n\t\t\t ***\n\t\t\t  * :\n\n"; // Program introduction
 }
 
 int string_length(string function_string){
@@ -26,6 +31,8 @@ int string_length(string function_string){
     return string_len;
 }
 
+/* Similar to that of 'strcmp' function of string.h, here we are comparing every single character of both string
+   this function will will used later in the program run-again loop for input validation to fix the bug*/
 bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
@@ -44,6 +51,10 @@ void take_input(string *user_input){
     cin >> *user_input;
 }
 
+/* The no of rows can't be negative or fractional,
+   therefore for the validation of the of the input this function is used,
+   this function will take string as a argument check each characters ASCII code is in range or not
+   and will return the bool value accordingly */
 bool is_input_valid(string user_input){
     for(int i = 0; user_input[i] != '\0' ; i++){
         // using the ACSII code to look for only numeric characters
@@ -53,26 +64,35 @@ bool is_input_valid(string user_input){
     return true;
 }
 
+/*This function will print the pattern as shown in the intro of the this code,
+  according to the no of rows entered by the user*/
 void print_pattern(int no_of_rows){
     // the upper pattern including the largest row
-    for(int row = 0; row<no_of_rows ; row++){
-        for(int space = 1; space < no_of_rows-row ; space++ ) // printing the spaces
+    for(int row = 1; row<=no_of_rows ; row++){
+        //Printing the spaces to keep the pattern symmetric vertically
+        for(int space = 1; space <= no_of_rows-row ; space++ ) {// printing the spaces
             cout << " ";
-        for(int j = 0; j < (2*row + 1) ; j++)
+        }
+        for(int j = 0; j < (2*row - 1) ; j++){
             cout << "$";
+        }
         cout << endl;
     }
 
     // the lower pattern
     for(int row = 0; row<no_of_rows ; row++){
-        for(int space = row; space >= 0  ; space--) // printing the spaces
+        //Printing the spaces to keep the pattern symmetric vertically
+        for(int space = row; space >= 0  ; space--){ // printing the spaces
             cout << " ";
-        for(int j = 1; j < 2*(no_of_rows-row) - 2 ; j++ )
+        }
+        for(int j = 1; j < 2*(no_of_rows-row) - 2 ; j++ ){
             cout << "$";
+        }
         cout << endl;
     }
 }
 
+//This function will ask the user to run the program again. with a valid input
 void want_to_run_again(string *user_input){
     cout << "\nWould you like to run the program again? (y for yes)/(n for no)" << endl;
     cin >> *user_input;
