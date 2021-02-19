@@ -17,7 +17,9 @@ int string_length(string function_string){
     return string_len;
 }
 
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/* Similar to that of 'strcmp' function of string.h, here we are comparing every single character of both string
+   this function will will used later in the program run-again loop for input validation */
+bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -35,6 +37,8 @@ void take_input(string *user_input){
     cin >> *user_input;
 }
 
+/*for 8-bit signed representation the range of the number that can be represented is
+  -128 to 127 therefore validating this range in the function declared below*/
 bool is_range_valid(string user_input){
     if(stoi(user_input) < -128 || stoi(user_input) > 127)
         return false;
@@ -42,11 +46,13 @@ bool is_range_valid(string user_input){
         return true;
 }
 
+
 bool is_input_valid(string user_input){
-    for(int i = 0; user_input[i] != '\0' ; i++){
+    int i = 0;
+    if(user_input[0] == '-') //for the negative integers
+        i++;
+    for(i; user_input[i] != '\0' ; i++){
         //Using the ASCII code for validation
-        if(i == 0 && user_input[i] == '-')
-            continue;
         if(user_input[i] < 48 || user_input[i] > 57){
             return false;
         }
@@ -54,13 +60,17 @@ bool is_input_valid(string user_input){
     return true;
 }
 
-//Computes the 2's complement
+/*this function will compute the 2's complement for the negative number,
+  2's complement is a mathematical operation on binary numbers and it is used in
+  computing as a method for the representation of the signed number representation,
+  here we are doing it by the short trick for 2's complement , i.e. after the appearance of the
+  first '1' , say index, from the LSB side & rest all are inverted */
 string compute_2s_complement(string magnitude_form){
     int index;
     for(index = 7; magnitude_form[index] != '1' ; index--); //finding the index of the first '1' in the string
     index--;
 
-    //inverting each bit after the first '1'
+    //inverting each bit after the first '1' appearance
     for( ; index >= 0 ; index--){
         if(magnitude_form[index] == '0')
             magnitude_form[index] = '1';
@@ -71,7 +81,9 @@ string compute_2s_complement(string magnitude_form){
     return magnitude_form;
 }
 
-// function to convert into binary form
+/*function for the conversion of a decimal number to binary number,
+  double dabble method is used here.
+  refer : https://circuitglobe.com/decimal-to-binary-conversion-methods.html for more details*/
 string binary_converter(int input_number){
     string output_string = "00000000";
 
@@ -115,8 +127,11 @@ int main(void){
         int input_num = stoi(user_input); //Converting the Valid input string to integer
         cout <<"Binary representation of " << input_num << " is ";
 
+        /*if the number is positive then no 2's complement is required as its magnitude form
+          and signed form are same*/
         if(input_num >= 0)
             cout << binary_converter(input_num) << ".\n\n";
+        /*but i case of the negative number 2's complement is required fro signed representation*/
         else{
             string magnitude_form = binary_converter(input_num*(-1));
             cout  << compute_2s_complement(magnitude_form) << ".\n\n";
