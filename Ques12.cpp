@@ -21,6 +21,9 @@ int string_length(string user_input){
     return string_size;
 }
 
+/*This function is declared here to fixed the bug in the run-again loop
+  As two strings can't be simply compared by str1 == str2, therefore this function is declared to compare the strings
+  , by comparing the length first and then each character of the string.*/
 bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
     if(string_length(string1) != string_length(string2))
         return false;
@@ -80,11 +83,11 @@ int calculate_nCr(int n, int r){
 }
 
 //Drawing a pascal triangle is like writing the
-//binomial coefficients of the a equation given by
+//binomial coefficients of the a binomial equation given by binomial theorem
 //Binomial theorem given by:
 //              n
 // (x + a)^n = sum nCr.x^r.a^(n-r)
-//             r=1
+//             r=0
 //Therefore nCr are the coefficients
 void draw_pascal_triangle(int rows){
     for(int i = 0; i < rows ; i++){
