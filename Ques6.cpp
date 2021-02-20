@@ -20,7 +20,10 @@ int string_length(string user_input){
     return string_size;
 }
 
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/* Similar to that of 'strcmp' function of string.h, here we are comparing every single character of both string
+   this function will will used later in the program run-again loop for input validation */
+bool compare_strings(string string1, string string2){
+    //first checking the if the lengths are equal or not
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -37,6 +40,8 @@ void take_input(string *user_input){
     cin >> *user_input;
 }
 
+/*the length of the array can't be negative, so to prevent error on the user side
+  this fucntion will validate the input and will be asked to enter again.*/
 bool is_input_valid(string user_input){ //Only positive number are Valid
     for(int i = 0; user_input[i] != '\0' ; i++){
         //using the ASCII table to verify, ACSII code for '0'=48 and '9'=57
@@ -47,6 +52,7 @@ bool is_input_valid(string user_input){ //Only positive number are Valid
     return true;
 }
 
+//this function will validate each element of the array, just after it is enter
 bool is_array_input_valid(string user_input){
     int dot_count, i = 0;
     if(user_input[0] == '-')  //For negative number
@@ -68,6 +74,8 @@ bool is_array_input_valid(string user_input){
     return true;
 }
 
+/*it will take the input form the user, for the whole array,
+  but one element at a time and will validate it.*/
 void take_array_input(float *arr, int array_size){
     cout << "\n\nEnter the array elements, press ENTER after every element: \n";
     string user_input;
@@ -85,6 +93,9 @@ void take_array_input(float *arr, int array_size){
     }
 }
 
+/*this function is the heart of the program main task is being done by this,
+  i.e. of rearranging in such a way that all the zeros are arranged at the start of the array,
+  and the rest are at the end, without disturbing the order, in which they were entered.*/
 void bring_zeros_to_start(float *arr, int array_length){
     int zero_count = 0;
     for(int i = 0; i<array_length ; i++){
@@ -102,7 +113,9 @@ void bring_zeros_to_start(float *arr, int array_length){
     }
 }
 
-void print_array(float *arr, int array_size){
+void print_array(float *arr, int array_size, string message){
+    cout << message;
+
     for(int i = 0; i<array_size ; i++){
         cout << arr[i] << " ";
     }
@@ -142,12 +155,10 @@ int main(void){
         float user_input_array[array_length];
 
         take_array_input(user_input_array, array_length);
-        cout << "\nThe User Entered Array is: \n";
-        print_array(user_input_array, array_length);
+        print_array(user_input_array, array_length, "\nThe User Entered Array is: \n");
 
         bring_zeros_to_start(user_input_array, array_length);
-        cout << "\nThe Rearranged Array is: \n";
-        print_array(user_input_array, array_length);
+        print_array(user_input_array, array_length, "\nThe Rearranged Array is: \n");
 
         want_to_run_again(&continue_program);
 
