@@ -20,6 +20,9 @@ int string_length(string user_input){
     return string_size;
 }
 
+/*This function is declared here to fixed the bug in the run-again loop
+  As two strings can't be simply compared by str1 == str2, therefore this function is declared to compare the strings
+  , by comparing the length first and then each character of the string.*/
 bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
     if(string_length(string1) != string_length(string2))
         return false;
@@ -50,7 +53,7 @@ bool is_number_valid(string user_input){
 
 bool is_input_in_range(string user_input){
     int number = stoi(user_input);
-    if(number <= 48)
+    if(number <= 48) //the Fibonacci terms after 48 will exceed the limit of e normal 4 byte integer
         return true;
     else
         return false;
