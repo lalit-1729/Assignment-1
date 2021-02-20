@@ -19,9 +19,9 @@ int string_length(string user_input){
     return string_size;
 }
 
-//This function is declared here to fixed the bug in the run-again loop
-//As two strings can't be simple compared by str1 == str2, therefore this function is declared to compare the strings
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/*This function is declared here to fixed the bug in the run-again loop
+  As two strings can't be simple compared by str1 == str2, therefore this function is declared to compare the strings.*/
+bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -39,8 +39,8 @@ void take_input(string *user_input){
     cin >> *user_input;
 }
 
-//Since, the square root of the negative number is not possible we will take only positive input from the user,
-//Therefore, this function helps us with that
+/*Since, the square root of the negative number is not possible we will take only positive input from the user,
+  Therefore, this function helps us with the same.*/
 bool is_input_valid(string user_input){
     for(int i = 0; user_input[i] != '\0' ; i++){
         if(user_input[i] < 48 || user_input[i] > 57){
@@ -63,7 +63,8 @@ int return_divisor(int num1, int num2){
     return divisor;
 }
 
-//Power function declared to divide the quotient by a certain power of 10 to return a fractional quotient
+/*Power function declared to divide the quotient by a certain power of 10 to return a,
+  quotient with a fractional part separated by dot.*/
 double power(int base, int exponent){
     if(exponent == 0)
         return 1;
@@ -86,7 +87,8 @@ void create_pair_of_two(int *pairs_array, int number, int pairs){
     }
 }
 
-//this function will update the quotient after performing each step of the long division method
+/*this function will return the updated the quotient and will update the remainder
+  after performing each step of the long division method*/
 int update_quotient(int quotient, int *remainder, int *pairs_array, int npairs){
     int divisor, unit_place_of_divisor;
 
@@ -146,6 +148,7 @@ void want_to_run_again(string *user_input){
 }
 
 
+//Main Method
 int main(){
     string continue_program;
 
