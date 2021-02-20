@@ -21,7 +21,10 @@ int string_length(string user_input){
     return string_size;
 }
 
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/*This function is declared here to fixed the bug in the run-again loop
+  As two strings can't be simply compared by str1 == str2, therefore this function is declared to compare the strings
+  , by comparing the length first and then each character of the string.*/
+bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -40,7 +43,7 @@ int compute_factorial(int number){
     if(number != 1){
         return number*compute_factorial(number-1);
     }
-    //factorial of 0 ,i.e 0! is 1
+    //factorial of 0 is 1 ,i.e 0! = 1
     else if(number == 0){
         return 1;
     }
@@ -54,6 +57,9 @@ void take_input(string *user_input){
     cin >> *user_input;
 }
 
+/*since in mathematics the factorial function is not defined for the negative number
+  and also not for fractional number, therefore validation is required to prevent the malfunctioning
+  of the program and this function does that for us.*/
 bool is_input_valid(string user_input){
     for(int i = 0; user_input[i] != '\0' ; i++){
         // using the ACSII code for validation
@@ -63,6 +69,9 @@ bool is_input_valid(string user_input){
     return true;
 }
 
+/*Since a normal integer is of 32 bits only therefore it maximum value is limited to 2^(31)-1
+  and therefore the validation is of the input is required so that the output is correct,
+  and this function helps us with the same. */
 bool is_input_in_range(string user_input){
     int number = stoi(user_input);
     if(number <= 12)
