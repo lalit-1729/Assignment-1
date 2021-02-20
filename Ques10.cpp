@@ -10,7 +10,7 @@ using namespace std;
 
 void refresh_screen(){
     system("cls"); //To clear the Console window
-    cout << "\n\n\t\t :: Quick Sort :: \n\n\n";
+    cout << "\n\n\t\t :: Quick Sort On the integers :: \n\n\n";
 }
 
 int string_length(string user_input){
@@ -21,7 +21,10 @@ int string_length(string user_input){
     return string_size;
 }
 
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/*This function is declared here to fixed the bug in the run-again loop
+  As two strings can't be simply compared by str1 == str2, therefore this function is declared to compare the strings
+  , by comparing the length first and then each character of the string.*/
+bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -50,6 +53,8 @@ bool is_array_input_valid(string user_input){
         if(user_input[i] < 48 || user_input[i] > 57){
             if(user_input[i] == '.'){ // For fractional number
                 dot_count++;
+                /*A fractional integer can have only one dot to separate the integer and fractional part
+                  and the same is being verified here.*/
                 if(dot_count > 1)
                     return false;
                 else
@@ -61,6 +66,8 @@ bool is_array_input_valid(string user_input){
     return true;
 }
 
+/*it will take the input form the user, for the whole array,
+  but one element at a time and will validate it.*/
 void take_array_input(float *arr, int array_size){
     cout << "\n\nEnter the array elements, one at a time, And press ENTER after every element: \n";
     string user_input;
@@ -89,7 +96,7 @@ bool is_input_valid(string user_input){
     return true;
 }
 
-//Prints the sorted array
+/*prints the provided array with the message provided by the programmer.*/
 void print_array(float *arr, int array_size, string message){
     cout << message;
     for(int i = 0; i<array_size ; i++){
@@ -168,10 +175,10 @@ int main(void){
         float user_array_input[array_size];
 
         take_array_input(user_array_input, array_size);
-        print_array(user_array_input, array_size, "The User entered array is:\n");
+        print_array(user_array_input, array_size, "The User entered array is:\n");//Entered array is being printed
 
         quick_sort(user_array_input, 0, array_size-1);
-        print_array(user_array_input, array_size, "The sorted array is:\n");//Results
+        print_array(user_array_input, array_size, "The sorted array is:\n");//Sorted array is being printed
 
         want_to_run_again(&continue_program);
 
