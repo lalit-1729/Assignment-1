@@ -100,7 +100,7 @@ while(continue_program == 'y' or continue_program == 'Y'):
     #Verifying the required condition for the matrix multiplication
     #i.e. the no fo columns of first matrix must be equal to no of rows of the second matrix
     while columns_A != rows_B:
-        print("\nThe no. of rows of matrix A is not matching with the no. of columns, please try again with a valid onoe:")
+        print("\nThe no. of columns of matrix A is not matching with the no. of rpws of matrix B, please try again with a valid onoe:")
         rows_A = take_positive_input("Enter the no of ROWS of matrix A: ")
         columns_A = take_positive_input("Enter the no of COLUMNS of matrix A: ")
         rows_B = take_positive_input("Enter the no of ROWS of matrix B: ")
