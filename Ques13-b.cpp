@@ -10,7 +10,7 @@ void refresh_screen(){
     system("cls"); //To clear the Console window
     cout << "\n\n\t\t :: Factorial Without Using Recursion :: \n";
     cout << "\t\t :: Valid output for 0-12 only ::\n\n"; //Due to four byte limit of the int data type
-    //It can be increased by using long long int, but it won't be of use after a certain limit
+    //It can be increased by using long long int, but it also won't be of use after a certain limit
 }
 
 int string_length(string user_input){
@@ -21,7 +21,10 @@ int string_length(string user_input){
     return string_size;
 }
 
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/*This function is declared here to fixed the bug in the run-again loop
+  As two strings can't be simply compared by str1 == str2, therefore this function is declared to compare the strings
+  , by comparing the length first and then each character of the string.*/
+bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -35,11 +38,11 @@ bool compare_strings(string string1, string string2){ //Similar to that of 'strc
 
 
 
-// factorial function without recursion
+//factorial function without recursion
 //Simple for loop is used for this purpose
 int compute_factorial(int number){
     int factorial = 1;
-    if(number == 0){
+    if(number == 0){ //factorial of 0 is 1 ,i.e 0! = 1
         return 1;
     }
     else{
@@ -56,17 +59,21 @@ void take_input(string *user_input){
     cin >> *user_input;
 }
 
-//validates only non-negative integer
+/*since in mathematics the factorial function is not defined for the negative number
+  and also not for fractional number, therefore validation is required to prevent the malfunctioning
+  of the program and this function does that for us.*/
 bool is_input_valid(string user_input){
     for(int i = 0; user_input[i] != '\0' ; i++){
         // using the ACSII code for validation
-        if(user_input[i] < 48 || user_input[i] > 57){
+        if(user_input[i] < 48 || user_input[i] > 57)
             return false;
-        }
     }
     return true;
 }
 
+/*Since a normal integer is of 32 bits only therefore it maximum value is limited to 2^(31)-1
+  and therefore the validation is of the input is required so that the output is correct,
+  and this function helps us with the same. */
 bool is_input_in_range(string user_input){
     int number = stoi(user_input);
     if(number <= 12)
