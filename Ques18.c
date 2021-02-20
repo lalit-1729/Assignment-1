@@ -54,6 +54,7 @@ int main(){
     return 0;
 }
 
+/*********************** Function Definition ************************/
 
 //Checks and prints the result of the anagrams
 void check_for_anagram(char *string1, char *string2){
@@ -90,7 +91,7 @@ void take_input(char *user_input, int string_number){
     scanf(" %s", user_input);
 }
 
-
+/*here we will validate only lowercase alphabets string.*/
 int is_string_valid(char *user_input){
     int string_size = compute_string_length(user_input);
     for(int i = 0; *(user_input+i) != '\0' ; i++){
@@ -133,7 +134,7 @@ void ask_to_run_again(char *continue_program){
 }
 
 void refresh_screen(){
-    system("cls");
+    system("cls"); //TO clear the console window
     printf("\n\n\t\t :: CHECKING FOR ANAGRAM :: \n");
     printf("\t   :: Only lowercase string is valid ::\n\n");
 }
