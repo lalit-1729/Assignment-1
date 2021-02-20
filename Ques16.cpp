@@ -19,7 +19,10 @@ int string_length(string user_input){
     return string_size;
 }
 
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/*This function is declared here to fixed the bug in the run-again loop
+  As two strings can't be simply compared by str1 == str2, therefore this function is declared to compare the strings
+  , by comparing the length first and then each character of the string.*/
+bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -31,22 +34,23 @@ bool compare_strings(string string1, string string2){ //Similar to that of 'strc
     return true;
 }
 
-
+/*using the recursion to compute the power,
+  the function will return base^exponent.*/
 int power(int base, int exponent){
 
     if(exponent == 0)
+        //Returning 1 and stopping the recursion
         return 1;
     else
+        //Calling the function again
         return base*power(base, exponent-1);
 }
 
-//takes the input from user
 void take_input(string *user_input){
     cout << "Enter a number: ";
     cin >> *user_input;
 }
 
-//validates only non-negative integer
 bool is_number_valid(string user_input){
     for(int i = 0; user_input[i] != '\0' ; i++){
         // using the ACSII code for validation
@@ -71,14 +75,14 @@ int sum_for_armstrong_number(int number){
     int no_of_digits = count_no_of_digits(number);
     int sum = 0;
     for(int i = 0; i<no_of_digits; i++){
-        int digit = number%10;
+        int digit = number%10; //Separating the digits from the units place
         sum += power(digit, no_of_digits);
-        number /= 10;
+        number /= 10;          //Removing the separated digit from the number
     }
     return sum;
 }
 
-//A number is a armstrong number if the above
+//A number is a Armstrong number if the above
 //evaluated sum is equal to the number itself
 void check_for_armstrong_number(int sum, int number){
     if(sum == number)
@@ -101,8 +105,7 @@ void want_to_run_again(string *user_input){
 }
 
 
-
-
+//Main Method
 int main(){
     string continue_program;
 
