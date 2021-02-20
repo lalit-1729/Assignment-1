@@ -1,4 +1,5 @@
 //This program takes a string as a input from the user
+//No input validation is Required
 //And prints which characters occur for max times
 
 #include <iostream>
@@ -7,7 +8,8 @@ using namespace std;
 
 void refresh_screen(){
     system("cls"); //To clear the Console window
-    cout << "\n\n\t\t :: MAXIMUM OCCURENCE :: \n\n";;
+    cout << "\n\n\t\t :: MAXIMUM OCCURRENCE IN THE STRING::\n";
+    cout << "\t\t\t :: All characters are valid :: \n\n";
 }
 
 int string_length(string user_input){
@@ -18,7 +20,10 @@ int string_length(string user_input){
     return string_size;
 }
 
-bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
+/*This function is declared here to fixed the bug in the run-again loop
+  As two strings can't be simply compared by str1 == str2, therefore this function is declared to compare the strings
+  , by comparing the length first and then each character of the string.*/
+bool compare_strings(string string1, string string2){
     if(string_length(string1) != string_length(string2))
         return false;
     else{
@@ -37,8 +42,8 @@ string take_input(){
     return user_input;
 }
 
-//Counts the frequency of occurence of each and
-//very character in the string
+//Counts the frequency of occurrence of each and
+//very character in the string, it is done as follows
 //Each character's frequency is stored at the ASCII code index
 //of the counting array
 void count_frequency(int *arr, string user_input){
@@ -51,7 +56,7 @@ void count_frequency(int *arr, string user_input){
     }
 }
 
-//Fetches the max frequency
+//Fetches the max frequency, from from the counting array
 int fetch_max_frequency(int *counting_array, int *max_frequency){
     int previous_max;
     int index = 0;
@@ -88,6 +93,7 @@ void want_to_run_again(string *user_input){
 }
 
 
+
 //Main Method
 int main(void){
     string continue_program;
@@ -97,7 +103,7 @@ int main(void){
         string user_input = take_input();
 
         int counting_array[200] = {0}; //All frequencies are initialized as 0
-        count_frequency(counting_array, user_input);
+        count_frequency(counting_array, user_input); //And here are they modified according to the string
 
         // finding the max frequency
         int max_frequency = counting_array[0];
