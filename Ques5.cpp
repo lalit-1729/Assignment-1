@@ -19,6 +19,8 @@ int string_length(string user_input){
     return string_size;
 }
 
+/* Similar to that of 'strcmp' function of string.h, here we are comparing every single character of both string
+   this function will will used later in the program run-again loop for input validation */
 bool compare_strings(string string1, string string2){ //Similar to that of 'strcmp' function of string.h
     if(string_length(string1) != string_length(string2))
         return false;
@@ -36,6 +38,9 @@ void take_input(string *user_input, int i){
     cin >> *user_input;
 }
 
+/* since the marks can't be negative, and fractional marks are allowed here,
+  we will validate the user input by referring to each character of the user input's
+  ASCII code and validating it.*/
 bool is_input_numeric(string user_input){
     int dot_count = 0;
     for(int i = 0 ; user_input[i] != '\0' ; i++){
@@ -43,6 +48,7 @@ bool is_input_numeric(string user_input){
         if(user_input[i] < 48 || user_input[i] > 57){
             if(user_input[i] == '.'){ // For fractional number
                 dot_count++;
+                //a fractional number can have only one dot to separate the integer and fractional part
                 if(dot_count > 1)
                     return false;
                 else
@@ -54,9 +60,10 @@ bool is_input_numeric(string user_input){
     return true;
 }
 
-bool is_range_valid(string user_input){
+//Validating the range of the marks provided by the programmer
+bool is_range_valid(string user_input, int upper_limit, int lower_limit){
     float marks = stof(user_input); //string to float conversion
-    if(marks > -1 && marks <100)
+    if(marks >= lower_limit && marks <= upper_limit)
         return true;
     else
         return false;
@@ -89,7 +96,7 @@ int main(void){
             take_input(&user_input, i);
 
             //Input validation
-            while( !is_input_numeric(user_input) || !is_range_valid(user_input)){
+            while( !is_input_numeric(user_input) || !is_range_valid(user_input, 100, 0)){
                 cout << "Invalid input, please try again : ";
                 cin >> user_input;
             }
